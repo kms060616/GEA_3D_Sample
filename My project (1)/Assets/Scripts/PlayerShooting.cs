@@ -63,5 +63,12 @@ public class PlayerShooting : MonoBehaviour
         Vector3 direction = (targetPoint - firePoint.position).normalized;
 
         GameObject proj = Instantiate(projectilePrefab2, firePoint.position, Quaternion.LookRotation(direction));
+
+        Projectile ps = proj.GetComponent<Projectile>();
+        if (ps != null)
+        {
+            ps.speed = 5f;
+            ps.damage = 3;
+        }
     }
 }

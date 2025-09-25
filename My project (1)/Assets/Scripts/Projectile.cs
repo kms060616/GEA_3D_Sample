@@ -6,8 +6,9 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 20f;
     public float lifeTime = 2f;
+    public int damage = 1;
 
-    public PlayerShooting PS;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +25,11 @@ public class Projectile : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Destroy(other.gameObject);
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
     }
