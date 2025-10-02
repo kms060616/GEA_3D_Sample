@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
@@ -18,6 +19,11 @@ public class PlayerMove : MonoBehaviour
 
     private CinemachinePOV pov;
 
+    public int maxHP = 100;
+
+    private int currentHP;
+    public Slider hpSlider;
+
     
 
     private CharacterController controller;
@@ -30,11 +36,20 @@ public class PlayerMove : MonoBehaviour
         controller = GetComponent<CharacterController>();
         pov = virtualCam.GetCinemachineComponent<CinemachinePOV>();
         cS = FindObjectOfType<CinemachineSwitcher>();
+
+        currentHP = maxHP;
+        hpSlider.value = 1f;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            pov.m_HorizontalAxis.Value = transform.eulerAngles.y;
+            pov.m_VerticalAxis.Value = 0f;
+        }
 
         isGrounded = controller.isGrounded;
         if (isGrounded && velocity.y < 0)
@@ -86,5 +101,20 @@ public class PlayerMove : MonoBehaviour
 
 
 
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHP -= damage;
+        hpSlider.value = (float)currentHP / maxHP;
+
+        if (currentHP <= 0)
+        {
+            Die();
+        }
+    }
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
