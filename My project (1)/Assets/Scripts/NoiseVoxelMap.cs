@@ -16,6 +16,8 @@ public class NoiseVoxelMap : MonoBehaviour
 
     public int depth = 10;
 
+    public int waterLevel = 4;
+
     public int maxHeight = 16;
 
     [SerializeField] float noiseScale = 20;
@@ -25,7 +27,7 @@ public class NoiseVoxelMap : MonoBehaviour
         float offsetX = Random.Range(-9999f, 9999f);
         float offsetZ = Random.Range(-9999f, 9999f);
 
-        for (int x = 0; x < depth; x++)
+        for (int x = 0; x < width; x++)      
         {
             for (int z = 0; z < depth; z++)
             {
@@ -34,34 +36,29 @@ public class NoiseVoxelMap : MonoBehaviour
 
                 float noise = Mathf.PerlinNoise(nx, nz);
 
-                float h = Mathf.FloorToInt(noise * maxHeight);
+                
+                int h = Mathf.FloorToInt(noise * maxHeight);
 
                 if (h <= 0) continue;
 
+                
                 for (int y = 0; y <= h; y++)
                 {
-
                     if (y == h)
-                    {
-                        
                         PlaceGrass(x, y, z);
-                        
-                    }
                     else
-                    {
                         Place(x, y, z);
-                        
-                    }    
-                    
-                    //for ()
-                       
                 }
-                    
 
+                
+                for (int y2 = h + 1; y2 <= waterLevel; y2++)
+                {
+                    PlaceWater(x, y2, z);
+                }
             }
         }
 
-        
+
     }
 
     
