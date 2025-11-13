@@ -34,8 +34,8 @@ public class EnemyProjectile : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerMove pc = other.GetComponent<PlayerMove>();
-            if (pc != null) pc.TakeDamage(damage);
+            
+            
 
             Destroy(gameObject);
         }    
