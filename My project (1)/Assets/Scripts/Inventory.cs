@@ -6,24 +6,38 @@ public class Inventory : MonoBehaviour
 {
     public Dictionary<BlockType, int> items = new();
 
+
+    [SerializeField] InventoryUI inventoryUI;
+
     public void Add(BlockType type, int count = 1)
     {
         if (!items.ContainsKey(type)) items[type] = 0;
         items[type] += count;
         Debug.Log($"[Inventory] + {count} {type} (รั {items[type]})");
+
+        if (inventoryUI != null)
+            inventoryUI.UpdateInventory(this);
     }
 
     public bool Consume(BlockType type, int count = 1)
     {
         if (!items.TryGetValue(type, out var have) || have < count) return false;
         items[type] = have - count;
-        Debug.Log($"[Inventory] -{count} {type} (รั {items[type]}");
+        Debug.Log($"[Inventory] -{count} {type} (รั {items[type]})");
+
+        if (inventoryUI != null)
+            inventoryUI.UpdateInventory(this);
+
         return true;
+
+
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        Add(BlockType.Dirt, 5);
+        Add(BlockType.Grass, 3);
+        Add(BlockType.Water, 1);
     }
 
     // Update is called once per frame
