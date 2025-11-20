@@ -14,6 +14,8 @@ public class PlayerHarvester : MonoBehaviour
     public Inventory inventory;
     InventoryUI invenUI;
 
+    public GameObject seletedBlock;
+
     private void Awake()
     {
         _cam = Camera.main;
@@ -32,6 +34,7 @@ public class PlayerHarvester : MonoBehaviour
     {
         if (invenUI.selectedIndex < 0)
         {
+            seletedBlock.transform.localScale = Vector3.zero;
             if (Input.GetMouseButton(0) && Time.time >= _nextHitTime)
             {
                 _nextHitTime = Time.time + hitCooldown;
@@ -49,6 +52,19 @@ public class PlayerHarvester : MonoBehaviour
         }
         else
         {
+            Ray rayDebug = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(rayDebug, out var hitDebug, rayDistance, hitMask, QueryTriggerInteraction.Ignore))
+            {
+                //Debug.DrawRay(hitDebug.point, hitDebug.normal, Color.red, 2f);
+                Vector3Int placePos = AdjacentCellOnHitFace(hitDebug);
+                seletedBlock.transform.localScale = Vector3.one;
+                seletedBlock.transform.position = placePos;
+                seletedBlock.transform.rotation = Quaternion.identity;
+            }
+            else
+            {
+                seletedBlock.transform.localScale = Vector3.zero;
+            }
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
