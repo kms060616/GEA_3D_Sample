@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -14,9 +15,11 @@ public class InventoryUI : MonoBehaviour
     public GameObject SlotItem;
     List<GameObject> items = new List<GameObject>();
 
+    public int selectedIndex = -1;
+
     public void UpdateInventory(Inventory myInven)
     {
-        foreach(var slotItems in items)
+        foreach (var slotItems in items)
         {
             Destroy(slotItems);
         }
@@ -37,23 +40,20 @@ public class InventoryUI : MonoBehaviour
             switch (item.Key)
             {
                 case BlockType.Dirt:
-                    sltem.itemImage.sprite = Dirt;
+                    sltem.ItemSetting(Dirt, "x" + item.Value.ToString(), item.Key);
                     break;
 
                 case BlockType.Water:
-                    sltem.itemImage.sprite = Water;
+                    sltem.ItemSetting(Water, "x" + item.Value.ToString(), item.Key);
                     break;
                 case BlockType.Grass:
-                    sltem.itemImage.sprite = Grass;
+                    sltem.ItemSetting(Grass, "x" + item.Value.ToString(), item.Key);
                     break;
 
 
             }
 
-            if (sltem.itemText != null)
-            {
-                sltem.itemText.text = item.Value.ToString();
-            }
+
             idx++;
 
         }
@@ -61,12 +61,59 @@ public class InventoryUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        for (int i = 0; i < Mathf.Min(9, Slot.Count); i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                SetSlectedIndex(i);
+            }
+        }
+    }
+
+    public void SetSlectedIndex(int idx)
+    {
+        ResetSelection();
+        if (selectedIndex == idx)
+        {
+            selectedIndex = -1;
+        }
+        else
+        {
+            if (idx >= items.Count)
+            {
+                selectedIndex = -1;
+            }
+            else
+            {
+                SetSelection(idx);
+                selectedIndex = idx;
+
+            }
+        }
+   
+    }
+
+    public void ResetSelection()
+    {
+        foreach(var slot in Slot)
+        {
+            slot.GetComponent<Image>().color = Color.white;
+        }
+    }
+
+    void SetSelection(int _idx)
+    {
+        Slot[_idx].GetComponent<Image>().color = Color.yellow;
+    }
+
+    public BlockType GetInventorySlot()
+    {
+        return items[selectedIndex].GetComponent<SlotItemPrefab>().blockType;
     }
 }

@@ -9,6 +9,8 @@ public class Block : MonoBehaviour
 
     public BlockType type = BlockType.Dirt;
     public int maxHp = 3;
+    
+
 
     [HideInInspector] public int hp;
 

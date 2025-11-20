@@ -5,9 +5,10 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public Dictionary<BlockType, int> items = new();
+    InventoryUI invenUI;
 
 
-    [SerializeField] InventoryUI inventoryUI;
+    
 
     public void Add(BlockType type, int count = 1)
     {
@@ -15,8 +16,7 @@ public class Inventory : MonoBehaviour
         items[type] += count;
         Debug.Log($"[Inventory] + {count} {type} (รั {items[type]})");
 
-        if (inventoryUI != null)
-            inventoryUI.UpdateInventory(this);
+        invenUI.UpdateInventory(this);
     }
 
     public bool Consume(BlockType type, int count = 1)
@@ -25,8 +25,14 @@ public class Inventory : MonoBehaviour
         items[type] = have - count;
         Debug.Log($"[Inventory] -{count} {type} (รั {items[type]})");
 
-        if (inventoryUI != null)
-            inventoryUI.UpdateInventory(this);
+        if (items[type] == 0)
+        {
+            items.Remove(type);
+            invenUI.selectedIndex = -1;
+            invenUI.ResetSelection();
+
+        }
+        invenUI.UpdateInventory(this);
 
         return true;
 
@@ -35,9 +41,7 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Add(BlockType.Dirt, 5);
-        Add(BlockType.Grass, 3);
-        Add(BlockType.Water, 1);
+        invenUI = FindObjectOfType<InventoryUI>();
     }
 
     // Update is called once per frame

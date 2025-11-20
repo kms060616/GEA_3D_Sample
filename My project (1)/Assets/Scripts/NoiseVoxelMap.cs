@@ -47,7 +47,7 @@ public class NoiseVoxelMap : MonoBehaviour
                     if (y == h)
                         PlaceGrass(x, y, z);
                     else
-                        Place(x, y, z);
+                        PlaceDirt(x, y, z);
                 }
 
                 
@@ -60,6 +60,21 @@ public class NoiseVoxelMap : MonoBehaviour
 
 
     }
+    public void PlaceTile(Vector3Int pos, BlockType type)
+    {
+        switch (type)
+        {
+            case BlockType.Dirt:
+                PlaceDirt(pos.x, pos.y, pos.z);
+                break;
+            case BlockType.Grass:
+                PlaceGrass(pos.x, pos.y, pos.z);
+                break;
+            case BlockType.Water:
+                PlaceWater(pos.x, pos.y, pos.z);
+                break;
+        }
+    }
 
     
 
@@ -69,7 +84,7 @@ public class NoiseVoxelMap : MonoBehaviour
         
     }
 
-    private void  Place(int x, int y, int z)
+    private void  PlaceDirt(int x, int y, int z)
     {
         var go = Instantiate(blockPrefabs, new Vector3(x, y, z), Quaternion.identity, transform);
         go.name = $"B_(x)_(y)_(z)";
