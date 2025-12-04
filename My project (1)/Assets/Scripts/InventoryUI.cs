@@ -12,6 +12,8 @@ public class InventoryUI : MonoBehaviour
     public Sprite Grass;
     public Sprite Water;
     public Sprite Axe;
+    public Sprite CraftingDirt;
+    public Sprite CraftingGrass;
     public List<Transform> Slot = new List<Transform>();
     public GameObject SlotItem;
     List<GameObject> items = new List<GameObject>();
@@ -52,6 +54,12 @@ public class InventoryUI : MonoBehaviour
                     break;
                 case ItemType.Axe:
                     sltem.ItemSetting(Axe, "x" + item.Value.ToString(), item.Key);
+                    break;
+                case ItemType.CraftingDirt:
+                    sltem.ItemSetting(CraftingDirt, "x" + item.Value.ToString(), item.Key);
+                    break;
+                case ItemType.CraftingGrass:
+                    sltem.ItemSetting(CraftingGrass, "x" + item.Value.ToString(), item.Key);
                     break;
 
 
