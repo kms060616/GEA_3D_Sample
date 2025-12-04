@@ -3,31 +3,37 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SlotItemPrefab : MonoBehaviour
+public class SlotItemPrefab : MonoBehaviour, IPointerClickHandler
 {
 
     public Image itemImage;
     public TextMeshProUGUI itemText;
-    public BlockType blockType;
+    public ItemType blockType;
+    public CraftingPanel craftingPanel;
+    
 
-    public void ItemSetting(Sprite itemSprite, string txt, BlockType type)
+    public void ItemSetting(Sprite itemSprite, string txt, ItemType type)
     {
         itemImage.sprite = itemSprite;
         itemText.text = txt;
         blockType = type;
         
     }
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
-        
+        if (!craftingPanel)
+            craftingPanel = FindObjectOfType<CraftingPanel>(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        
+        if (eventData.button != PointerEventData.InputButton.Right) return;
+        if (!craftingPanel) return;
+        craftingPanel.AddPanned(blockType, 1);
     }
+    
 }
